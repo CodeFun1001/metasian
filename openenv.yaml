@@ -1,0 +1,12 @@
+spec_version: "1.0"
+name: "LogFixerEnv"
+version: "0.1.0"
+description: "AI agent identifies and fixes server errors in logs."
+entrypoint: "main:app"
+tasks:
+  - id: "easy_typo"
+    difficulty: "easy"
+  - id: "medium_db_error"
+    difficulty: "medium"
+  - id: "hard_system_crash"
+    difficulty: "hard"
