@@ -1,0 +1,11 @@
+[project]
+name = "metasian"
+version = "1.0.0"
+description = "OpenEnv DevOps RL Environment"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+]
+[tool.setuptools.packages.find]
+where = ["."]

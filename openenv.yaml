@@ -1,12 +1,111 @@
 spec_version: "1.0"
-name: "LogFixerEnv"
-version: "0.1.0"
-description: "AI agent identifies and fixes server errors in logs."
+name: "metasian"
+version: "1.0.0"
+description: >
+  METASIAN — Autonomous DevOps Debugging Environment.
+  An AI agent acts as a senior DevOps engineer diagnosing and fixing
+  production system failures across three progressively harder scenarios.
+  Real-world simulation of log analysis, metric interpretation, root-cause
+  diagnosis, and targeted remediation.
+
 entrypoint: "main:app"
+framework: "fastapi"
+python_version: "3.10"
+
+observation:
+  type: object
+  properties:
+    system_state:
+      type: string
+      description: High-level health summary of the system
+    logs:
+      type: array
+      items:
+        type: string
+      description: Recent log lines (last 8)
+    metrics:
+      type: object
+      properties:
+        cpu_percent:    { type: number, description: "CPU usage 0–100" }
+        memory_percent: { type: number, description: "Memory usage 0–100" }
+        latency_ms:     { type: number, description: "API latency in ms" }
+        error_rate:     { type: number, description: "5xx rate 0.0–1.0" }
+        disk_io_mbps:   { type: number, description: "Disk I/O MB/s" }
+    step_count:
+      type: integer
+      description: Steps taken so far
+    available_actions:
+      type: array
+      items:
+        type: string
+    hint:
+      type: string
+      nullable: true
+
+action:
+  type: object
+  required: [action_type]
+  properties:
+    action_type:
+      type: string
+      enum: [read_logs, check_metrics, diagnose, restart_service, deploy_fix, rollback]
+    parameters:
+      type: object
+      description: Action-specific key-value parameters
+
+reward:
+  type: object
+  properties:
+    value:
+      type: number
+      minimum: 0.0
+      maximum: 1.0
+      description: Normalized reward for this step
+    raw:
+      type: number
+      description: Pre-clamp raw reward (can be negative)
+    reason:
+      type: string
+      description: Human-readable explanation of reward signal
+
 tasks:
-  - id: "easy_typo"
+  - id: "easy_memory_leak"
     difficulty: "easy"
-  - id: "medium_db_error"
+    description: >
+      Single memory leak bug in api-server. Clear log signals.
+      Agent must diagnose and deploy fix within 10 steps.
+    max_steps: 10
+    bug_types: [memory_leak]
+
+  - id: "medium_db_cascade"
     difficulty: "medium"
-  - id: "hard_system_crash"
+    description: >
+      Two interacting bugs: database connection pool exhaustion (db_timeout)
+      causing downstream API cascade failure (api_cascade).
+      Logs contain red-herring entries. Agent must identify both and fix both.
+    max_steps: 15
+    bug_types: [db_timeout, api_cascade]
+
+  - id: "hard_disk_corruption"
     difficulty: "hard"
+    description: >
+      Disk I/O failures (disk_failure) causing silent data corruption
+      (data_corruption) in database WAL segments. Delayed onset, sparse signals,
+      lagged metrics. Fix order matters — disk_failure must be resolved first.
+    max_steps: 20
+    bug_types: [disk_failure, data_corruption]
+
+endpoints:
+  reset:  { method: POST, path: /reset }
+  step:   { method: POST, path: /step  }
+  state:  { method: GET,  path: /state }
+  grade:  { method: GET,  path: /grade }
+  health: { method: GET,  path: /health }
+
+tags:
+  - devops
+  - debugging
+  - log-analysis
+  - infrastructure
+  - real-world
+  - openenv
