@@ -53,7 +53,7 @@ metasian/
 │    ├── __init__.py
 │    └── definitions.py
 ├── server/
-│    ├── app.py
+│    └── app.py
 ```
 
 ---

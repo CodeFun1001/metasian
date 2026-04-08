@@ -100,3 +100,10 @@ def list_tasks():
 @app.get("/health")
 def health():
     return {"status": "ok", "env": "metasian", "version": "1.0.0"}
+
+def main():
+    import uvicorn
+    uvicorn.run("server.app:app", host="0.0.0.0", port=7860)
+
+if __name__ == "__main__":
+    main()
