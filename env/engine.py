@@ -69,7 +69,7 @@ class MetasianEnv:
         out_of_steps = self._state.steps_taken >= self._state.max_steps
         self._state.done = all_fixed or out_of_steps
 
-        normalized = min(max(raw_reward, 0.0), 1.0)
+        normalized = min(max(raw_reward, 0.0001), 0.9999)
         reward = Reward(value=normalized, raw=raw_reward, reason=reason)
 
         obs = self._make_observation()
@@ -98,7 +98,7 @@ class MetasianEnv:
 
     def grade(self) -> float:
         if self._state is None or self._task is None:
-            return 0.0
+            return 0.0001
         state_dict = {
             "task_id": self._state.task_id,
             "diagnosed_bugs": list(self._state.diagnosed_bugs),
@@ -109,7 +109,9 @@ class MetasianEnv:
             "correct_fix_applied": self._state.correct_fix_applied,
             "partial_fix_applied": self._state.partial_fix_applied,
         }
-        return self._task.grader(state_dict)
+        score = self._task.grader(state_dict)
+
+        return max(0.0001, min(score, 0.9999))
 
     def _apply_action(self, action: Action) -> Tuple[float, str]:
         atype = action.action_type.lower().strip()
@@ -131,7 +133,7 @@ class MetasianEnv:
         elif atype == "rollback":
             return self._act_rollback(params)
 
-        return 0.0, "No-op"
+        return 0.01, "No-op"
 
     def _act_read_logs(self, params: dict) -> Tuple[float, str]:
         service = params.get("service", "all")
@@ -206,7 +208,7 @@ class MetasianEnv:
                     self._metrics_snapshot["error_rate"] - 0.05, 0.0
                 )
                 return 0.10, f"Rollback initiated for '{service}' — data integrity partially restored"
-        return 0.00, f"Rollback of '{service}' had no effect in this scenario"
+        return 0.01, f"Rollback of '{service}' had no effect in this scenario"
 
     def _apply_fix_effects(self, fix_type: str) -> None:
         """Update metrics to reflect a successful fix."""

@@ -1,14 +1,3 @@
----
-title: Metasian
-emoji: 🦀
-colorFrom: pink
-colorTo: indigo
-sdk: docker
-pinned: false
-short_description: AI-powered DevOps Debugging Environment
----
-
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
 # 🔧 METASIAN — Autonomous DevOps Debugging Environment
 
 > **OpenEnv-compatible RL environment | India's Biggest Mega AI Hackathon — Round 1**
@@ -52,8 +41,8 @@ metasian/
 ├── tasks/
 │    ├── __init__.py
 │    └── definitions.py
-├── server/
-│    └── app.py
+└── server/
+     └── app.py
 ```
 
 ---

@@ -24,7 +24,7 @@ def grade_easy(task_state: dict) -> float:
             score += 0.20
     elif task_state.get("partial_fix_applied"):
         score += 0.20
-    return min(round(score, 4), 1.0)
+    return min(max(round(score, 4), 0.0001), 0.9999)
 
 
 EASY_TASK = TaskDefinition(
@@ -75,7 +75,7 @@ def grade_medium(task_state: dict) -> float:
     if "db_timeout" in fixed and "api_cascade" in fixed:
         if task_state.get("steps_taken", 99) <= 8:
             score += 0.10
-    return min(round(score, 4), 1.0)
+    return min(max(round(score, 4), 0.0001), 0.9999)
 
 
 MEDIUM_TASK = TaskDefinition(
@@ -132,7 +132,7 @@ def grade_hard(task_state: dict) -> float:
             score += 0.25
     if "rollback" in history:
         score += 0.10
-    return min(max(round(score, 4), 0.0), 1.0)
+    return min(max(round(score, 4), 0.0001), 0.9999)
 
 
 HARD_TASK = TaskDefinition(

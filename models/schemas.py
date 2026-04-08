@@ -43,7 +43,7 @@ class Action(BaseModel):
 
 
 class Reward(BaseModel):
-    value: float = Field(..., ge=0.0, le=1.0, description="Normalized reward in [0, 1]")
+    value: float = Field(..., ge=0.0001, le=0.9999, description="Normalized reward in (0, 1)")
     raw: float = Field(..., description="Pre-clamp raw reward (can be negative)")
     reason: str = Field(..., description="Human-readable explanation of this reward signal")
 
