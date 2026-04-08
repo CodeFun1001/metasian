@@ -85,13 +85,13 @@ def log_step(step: int, action: str, reward: float, done: bool, error: Optional[
     error_val = error if error else "null"
     done_val = str(done).lower()
     print(
-        f"[STEP] step={step} action={action} reward={reward:.2f} done={done_val} error={error_val}",
+        f"[STEP] step={step} action={action} reward={reward:.4f} done={done_val} error={error_val}",
         flush=True,
     )
 
 
 def log_end(success: bool, steps: int, score: float, rewards: List[float]) -> None:
-    rewards_str = ",".join(f"{r:.2f}" for r in rewards)
+    rewards_str = ",".join(f"{r:.4f}" for r in rewards)
     print(f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={rewards_str}", flush=True)
 
 
@@ -101,7 +101,7 @@ def build_user_prompt(step: int, last_echoed: str, last_reward: float, history: 
         f"""
         Step: {step}
         Last echoed message: {last_echoed!r}
-        Last reward: {last_reward:.2f}
+        Last reward: {last_reward:.4f}
         Previous steps:
         {history_block}
         Send your next message.
@@ -167,7 +167,7 @@ async def main() -> None:
 
             log_step(step=step, action=message, reward=reward, done=done, error=error)
 
-            history.append(f"Step {step}: {message!r} -> reward {reward:+.2f}")
+            history.append(f"Step {step}: {message!r} -> reward {reward:+.4f}")
 
             if done:
                 break

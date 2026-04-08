@@ -1,5 +1,5 @@
 ---
-title: Metasian🦀
+title: 🦀Metasian
 emoji: "🤖"
 colorFrom: pink
 colorTo: indigo

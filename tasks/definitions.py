@@ -21,7 +21,7 @@ def grade_easy(task_state: dict) -> float:
     if task_state.get("correct_fix_applied"):
         score += 0.50
         if task_state.get("steps_taken", 99) <= 5:
-            score += 0.20
+            score += 0.19
     elif task_state.get("partial_fix_applied"):
         score += 0.20
     return min(max(round(score, 4), 0.0001), 0.9999)
@@ -63,7 +63,6 @@ def grade_medium(task_state: dict) -> float:
     score = 0.0001
     diagnosed = task_state.get("diagnosed_bugs", [])
     fixed = task_state.get("fixed_bugs", [])
-
     if "db_timeout" in diagnosed:
         score += 0.20
     if "api_cascade" in diagnosed:
@@ -74,7 +73,7 @@ def grade_medium(task_state: dict) -> float:
         score += 0.25
     if "db_timeout" in fixed and "api_cascade" in fixed:
         if task_state.get("steps_taken", 99) <= 8:
-            score += 0.10
+            score += 0.09
     return min(max(round(score, 4), 0.0001), 0.9999)
 
 
@@ -118,7 +117,6 @@ def grade_hard(task_state: dict) -> float:
     diagnosed = task_state.get("diagnosed_bugs", [])
     fixed = task_state.get("fixed_bugs", [])
     history = task_state.get("action_history", [])
-
     if "disk_failure" in diagnosed:
         score += 0.20
     if "data_corruption" in diagnosed:
@@ -126,12 +124,16 @@ def grade_hard(task_state: dict) -> float:
     if "disk_failure" in fixed:
         score += 0.25
     if "data_corruption" in fixed:
-        if fixed.index("data_corruption") < fixed.index("disk_failure") if "disk_failure" in fixed else False:
+        wrong_order = (
+            "disk_failure" in fixed
+            and fixed.index("data_corruption") < fixed.index("disk_failure")
+        )
+        if wrong_order:
             score -= 0.15
         else:
             score += 0.25
-    if "rollback" in history:
-        score += 0.10
+    if any("rollback" in h for h in history):
+        score += 0.09
     return min(max(round(score, 4), 0.0001), 0.9999)
 
 
@@ -154,10 +156,8 @@ HARD_TASK = TaskDefinition(
         "[2025-04-08 09:12:03] db-primary:   INFO    Replication lag: 120ms",
         "[2025-04-08 09:45:17] storage-node: ERROR   I/O error on /dev/sdb1: sector 0x3A7F bad",
         "[2025-04-08 09:45:19] db-primary:   WARN    Checkpoint CRC mismatch — retrying",
-        # Misleading entries
         "[2025-04-08 10:01:00] api-server:   INFO    Request rate normal: 842 req/s",
         "[2025-04-08 10:01:05] cache-layer:  INFO    Eviction rate nominal",
-        # Delayed symptom
         "[2025-04-08 10:15:44] db-primary:   ERROR   Corrupt page detected in WAL segment 00000003",
     ],
     initial_metrics={

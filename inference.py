@@ -83,7 +83,6 @@ def env_reset(task_id: str) -> Dict[str, Any]:
     resp.raise_for_status()
     return resp.json()
 
-
 def env_step(action_type: str, parameters: dict) -> Dict[str, Any]:
     resp = requests.post(
         f"{ENV_BASE_URL}/step",
@@ -92,7 +91,6 @@ def env_step(action_type: str, parameters: dict) -> Dict[str, Any]:
     )
     resp.raise_for_status()
     return resp.json()
-
 
 def env_grade() -> float:
     resp = requests.get(f"{ENV_BASE_URL}/grade", timeout=10)
@@ -114,7 +112,7 @@ def build_user_prompt(obs: dict, step: int, history: List[str]) -> str:
       CPU:     {metrics.get('cpu_percent', '?')}%
       Memory:  {metrics.get('memory_percent', '?')}%
       Latency: {metrics.get('latency_ms', '?')} ms
-      Errors:  {metrics.get('error_rate', '?')} (0–1 scale)
+      Errors:  {metrics.get('error_rate', '?')} (0-1 scale)
       Disk I/O:{metrics.get('disk_io_mbps', '?')} MB/s
 
     RECENT LOGS:
@@ -127,12 +125,7 @@ def build_user_prompt(obs: dict, step: int, history: List[str]) -> str:
     """).strip()
 
 
-def get_agent_action(
-    client: OpenAI,
-    obs: dict,
-    step: int,
-    history: List[str],
-) -> Dict[str, Any]:
+def get_agent_action(client: OpenAI, obs: dict, step: int, history: List[str]) -> Dict[str, Any]:
     user_prompt = build_user_prompt(obs, step, history)
     try:
         completion = client.chat.completions.create(
@@ -146,13 +139,11 @@ def get_agent_action(
             timeout=30,
         )
         raw = (completion.choices[0].message.content or "").strip()
-        # Strip any accidental markdown fences
         raw = raw.replace("```json", "").replace("```", "").strip()
         parsed = json.loads(raw)
         return parsed
     except json.JSONDecodeError as e:
         print(f"[DEBUG] JSON parse error: {e} | raw={raw!r}", flush=True)
-        # Fallback: read_logs
         return {"action_type": "read_logs", "parameters": {"service": "all"}}
     except Exception as e:
         print(f"[DEBUG] LLM call failed: {e}", flush=True)
@@ -179,12 +170,11 @@ def run_task(client: OpenAI, task_id: str) -> float:
             action_dict = get_agent_action(client, obs, step, history)
             action_type = action_dict.get("action_type", "read_logs")
             parameters = action_dict.get("parameters", {})
-
             action_str = f"{action_type}({json.dumps(parameters, separators=(',', ':'))})"
 
             try:
                 result = env_step(action_type, parameters)
-                reward_val = result.get("reward", {}).get("value", 0.0)
+                reward_val = result.get("reward", {}).get("value", 0.0001)
                 done = result.get("done", False)
                 obs = result.get("observation", obs)
                 error_msg = None
@@ -195,7 +185,7 @@ def run_task(client: OpenAI, task_id: str) -> float:
 
             rewards.append(reward_val)
             steps_taken = step
-            history.append(f"Step {step}: {action_str} → reward={reward_val:.4f}")
+            history.append(f"Step {step}: {action_str} -> reward={reward_val:.4f}")
 
             log_step(
                 step=step,
@@ -220,19 +210,18 @@ def run_task(client: OpenAI, task_id: str) -> float:
             rewards=rewards,
         )
 
-    return max(0.0001, min(score, 0.9999))
+    return min(max(score, 0.0001), 0.9999)
+
 
 def main() -> None:
     if not API_KEY:
         print(
-            "[ERROR] HF_TOKEN environment variable not set. "
-            "Set it to your HuggingFace / LLM API key.",
+            "[ERROR] HF_TOKEN environment variable not set.",
             flush=True,
         )
         sys.exit(1)
 
     client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
-
     all_scores: Dict[str, float] = {}
 
     for task_id in TASK_IDS:
@@ -242,14 +231,14 @@ def main() -> None:
         score = run_task(client, task_id)
         all_scores[task_id] = score
 
-    print("\n" + "="*60, flush=True)
+    print("\n" + "=" * 60, flush=True)
     print("BASELINE RESULTS SUMMARY", flush=True)
-    print("="*60, flush=True)
+    print("=" * 60, flush=True)
     for tid, sc in all_scores.items():
         print(f"  {tid:<30} score={sc:.4f}", flush=True)
     avg = sum(all_scores.values()) / len(all_scores)
     print(f"\n  Average score: {avg:.4f}", flush=True)
-    print("="*60, flush=True)
+    print("=" * 60, flush=True)
 
 
 if __name__ == "__main__":

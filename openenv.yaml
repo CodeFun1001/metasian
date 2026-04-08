@@ -6,7 +6,8 @@ description: >
   An AI agent acts as a senior DevOps engineer diagnosing and fixing
   production system failures across three progressively harder scenarios.
   Real-world simulation of log analysis, metric interpretation, root-cause
-  diagnosis, and targeted remediation.
+  diagnosis, and targeted remediation. Includes anti-cheat monitoring,
+  rule-based critic, dynamic scenario generation via LLM, and Gradio UI.
 
 entrypoint: "server.app:main"
 framework: "fastapi"
@@ -26,10 +27,10 @@ observation:
     metrics:
       type: object
       properties:
-        cpu_percent:    { type: number, description: "CPU usage 0–100" }
-        memory_percent: { type: number, description: "Memory usage 0–100" }
+        cpu_percent:    { type: number, description: "CPU usage 0-100" }
+        memory_percent: { type: number, description: "Memory usage 0-100" }
         latency_ms:     { type: number, description: "API latency in ms" }
-        error_rate:     { type: number, description: "5xx rate 0.0–1.0" }
+        error_rate:     { type: number, description: "5xx rate 0.0-1.0" }
         disk_io_mbps:   { type: number, description: "Disk I/O MB/s" }
     step_count:
       type: integer
