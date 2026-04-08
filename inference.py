@@ -97,7 +97,7 @@ def env_step(action_type: str, parameters: dict) -> Dict[str, Any]:
 def env_grade() -> float:
     resp = requests.get(f"{ENV_BASE_URL}/grade", timeout=10)
     resp.raise_for_status()
-    return resp.json().get("score", 0.0)
+    return resp.json().get("score", 0.0001)
 
 def build_user_prompt(obs: dict, step: int, history: List[str]) -> str:
     metrics = obs.get("metrics", {})
@@ -163,7 +163,7 @@ def run_task(client: OpenAI, task_id: str) -> float:
 
     rewards: List[float] = []
     steps_taken = 0
-    score = 0.0
+    score = 0.0001
     success = False
     history: List[str] = []
     error_msg: Optional[str] = None
@@ -189,7 +189,7 @@ def run_task(client: OpenAI, task_id: str) -> float:
                 obs = result.get("observation", obs)
                 error_msg = None
             except requests.HTTPError as e:
-                reward_val = 0.0
+                reward_val = 0.0001
                 error_msg = str(e)[:80]
                 done = True
 

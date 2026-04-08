@@ -1,5 +1,5 @@
 ---
-title: 🦀Metasian
+title: Metasian🦀
 emoji: "🤖"
 colorFrom: pink
 colorTo: indigo
@@ -145,7 +145,7 @@ A single microservice (`api-server`) is consuming memory at an accelerating rate
 - Correct diagnosis: +0.30  
 - Correct fix: +0.50  
 - Fix within ≤5 steps: +0.20 bonus  
-- Max score: **1.00**
+- Max score: **0.9999**
 
 ---
 
@@ -162,7 +162,7 @@ The database connection pool is exhausted, causing API gateway to enter circuit-
 - Fix `db_timeout`: +0.30  
 - Fix `api_cascade`: +0.25  
 - Both fixed in ≤8 steps: +0.10 efficiency bonus  
-- Max score: **1.00**
+- Max score: **0.9999**
 
 ---
 
@@ -184,7 +184,7 @@ A storage node is experiencing intermittent disk I/O errors that began 2 hours a
 - Fix `data_corruption` (after disk): +0.25  
 - Rollback used: +0.10  
 - Wrong fix order penalty: −0.15  
-- Max score: **1.00**
+- Max score: **0.9999**
 
 ---
 

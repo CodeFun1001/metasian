@@ -21,7 +21,7 @@ STDOUT FORMAT
 - The script must emit exactly three line types to stdout, in this order:
 
     [START] task=<task_name> env=<benchmark> model=<model_name>
-    [STEP]  step=<n> action=<action_str> reward=<0.00> done=<true|false> error=<msg|null>
+    [STEP]  step=<n> action=<action_str> reward=<0.0001> done=<true|false> error=<msg|null>
     [END]   success=<true|false> steps=<n> score=<score> rewards=<r1,r2,...,rn>
 
   Rules:

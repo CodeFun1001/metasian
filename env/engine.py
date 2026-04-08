@@ -109,9 +109,11 @@ class MetasianEnv:
             "correct_fix_applied": self._state.correct_fix_applied,
             "partial_fix_applied": self._state.partial_fix_applied,
         }
-        score = self._task.grader(state_dict)
-
-        return max(0.0001, min(score, 0.9999))
+        raw_score = self._task.grader(state_dict)
+        print("RAW GRADE:", raw_score)
+        final_score = min(max(raw_score, 0.0001), 0.9999)
+        print("FINAL GRADE:", final_score)
+        return max(0.0001, min(final_score, 0.9999))
 
     def _apply_action(self, action: Action) -> Tuple[float, str]:
         atype = action.action_type.lower().strip()

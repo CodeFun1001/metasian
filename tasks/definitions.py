@@ -15,7 +15,7 @@ class TaskDefinition:
     hint: Optional[str] = None
 
 def grade_easy(task_state: dict) -> float:
-    score = 0.0
+    score = 0.0001
     if task_state.get("correct_diagnosis_made"):
         score += 0.30
     if task_state.get("correct_fix_applied"):
@@ -60,7 +60,7 @@ EASY_TASK = TaskDefinition(
 )
 
 def grade_medium(task_state: dict) -> float:
-    score = 0.0
+    score = 0.0001
     diagnosed = task_state.get("diagnosed_bugs", [])
     fixed = task_state.get("fixed_bugs", [])
 
@@ -114,7 +114,7 @@ MEDIUM_TASK = TaskDefinition(
 )
 
 def grade_hard(task_state: dict) -> float:
-    score = 0.0
+    score = 0.0001
     diagnosed = task_state.get("diagnosed_bugs", [])
     fixed = task_state.get("fixed_bugs", [])
     history = task_state.get("action_history", [])

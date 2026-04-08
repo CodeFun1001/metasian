@@ -74,6 +74,7 @@ def state():
 @app.get("/grade")
 def grade():
     score = env.grade()
+    print("GRADE CALCULATED:", score)
     internal = env.state()
     return {
         "score": score,

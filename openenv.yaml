@@ -58,8 +58,8 @@ reward:
   properties:
     value:
       type: number
-      minimum: 0.0
-      maximum: 1.0
+      minimum: 0.0001
+      maximum: 0.9999
       description: Normalized reward for this step
     raw:
       type: number
