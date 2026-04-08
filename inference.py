@@ -61,16 +61,16 @@ def log_start(task: str, model: str) -> None:
 def log_step(step: int, action: str, reward: float, done: bool, error: Optional[str]) -> None:
     err = error if error else "null"
     print(
-        f"[STEP] step={step} action={action} reward={reward:.2f} "
+        f"[STEP] step={step} action={action} reward={reward:.4f} "
         f"done={str(done).lower()} error={err}",
         flush=True,
     )
 
 def log_end(success: bool, steps: int, score: float, rewards: List[float]) -> None:
-    rewards_str = ",".join(f"{r:.2f}" for r in rewards)
+    rewards_str = ",".join(f"{r:.4f}" for r in rewards)
     print(
         f"[END] success={str(success).lower()} steps={steps} "
-        f"score={score:.3f} rewards={rewards_str}",
+        f"score={score:.4f} rewards={rewards_str}",
         flush=True,
     )
 
@@ -195,7 +195,7 @@ def run_task(client: OpenAI, task_id: str) -> float:
 
             rewards.append(reward_val)
             steps_taken = step
-            history.append(f"Step {step}: {action_str} → reward={reward_val:.2f}")
+            history.append(f"Step {step}: {action_str} → reward={reward_val:.4f}")
 
             log_step(
                 step=step,
@@ -220,7 +220,7 @@ def run_task(client: OpenAI, task_id: str) -> float:
             rewards=rewards,
         )
 
-    return score
+    return max(0.0001, min(score, 0.9999))
 
 def main() -> None:
     if not API_KEY:
@@ -246,9 +246,9 @@ def main() -> None:
     print("BASELINE RESULTS SUMMARY", flush=True)
     print("="*60, flush=True)
     for tid, sc in all_scores.items():
-        print(f"  {tid:<30} score={sc:.3f}", flush=True)
+        print(f"  {tid:<30} score={sc:.4f}", flush=True)
     avg = sum(all_scores.values()) / len(all_scores)
-    print(f"\n  Average score: {avg:.3f}", flush=True)
+    print(f"\n  Average score: {avg:.4f}", flush=True)
     print("="*60, flush=True)
 
 
