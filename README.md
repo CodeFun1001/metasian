@@ -6,6 +6,13 @@ colorTo: indigo
 sdk: docker
 pinned: false
 short_description: AI-powered DevOps Debugging Environment
+tags:
+  - devops
+  - reinforcement-learning
+  - debugging
+  - fastapi
+  - openenv
+  - ai-agents
 ---
 
 # 🔧 METASIAN — Autonomous DevOps Debugging Environment
