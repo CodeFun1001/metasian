@@ -1401,7 +1401,7 @@ def build_ui():
 
     return demo
 
-def launch(port: int = 7861, share: bool = True):
+def launch(port: int = 7861, share: bool = False):
     ui = build_ui()
     ui.launch(
         server_name="0.0.0.0",
