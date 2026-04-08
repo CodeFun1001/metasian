@@ -1,11 +1,13 @@
 ---
-title: Metasian
-emoji: 🦀
+title: 🦀Metasian
+emoji: "🤖"
 colorFrom: pink
 colorTo: indigo
 sdk: docker
+app_port: 7860
+app_file: server/app.py
 pinned: false
-short_description: AI-powered DevOps Debugging Environment
+short_description: "AI-powered DevOps Debugging Environment"
 tags:
   - devops
   - reinforcement-learning
