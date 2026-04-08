@@ -1,3 +1,13 @@
+---
+title: Metasian
+emoji: 🦀
+colorFrom: pink
+colorTo: indigo
+sdk: docker
+pinned: false
+short_description: AI-powered DevOps Debugging Environment
+---
+
 # 🔧 METASIAN — Autonomous DevOps Debugging Environment
 
 > **OpenEnv-compatible RL environment | India's Biggest Mega AI Hackathon — Round 1**
