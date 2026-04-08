@@ -125,7 +125,7 @@ def _start_ui():
     time.sleep(2)
     try:
         from ui.dashboard import launch
-        launch(port=7860, share=True)
+        launch(port=7861, share=True)
     except Exception as e:
         print(f"[UI ERROR] {e}", flush=True)
 

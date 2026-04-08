@@ -13,5 +13,6 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY . .
 
 EXPOSE 7860
+EXPOSE 7861
 
 CMD ["python", "-m", "server.app"]
