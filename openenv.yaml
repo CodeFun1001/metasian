@@ -8,7 +8,7 @@ description: >
   Real-world simulation of log analysis, metric interpretation, root-cause
   diagnosis, and targeted remediation.
 
-entrypoint: "main:app"
+entrypoint: "server.app:app"
 framework: "fastapi"
 python_version: "3.10"
 

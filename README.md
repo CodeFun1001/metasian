@@ -42,15 +42,18 @@ metasian/
 ├── requirements.txt
 ├── pyproject.toml
 ├── README.md
+├── uv.lock
 ├── env/
 │   ├── __init__.py
 │   └── engine.py
 ├── models/
 │   ├── __init__.py
 │   └── schemas.py
-└── tasks/
-    ├── __init__.py
-    └── definitions.py
+├── tasks/
+│    ├── __init__.py
+│    └── definitions.py
+├── server/
+│    ├── app.py
 ```
 
 ---
@@ -194,7 +197,7 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
 # 4. Start the environment server
-uvicorn main:app --host 0.0.0.0 --port 7860 --reload
+uvicorn server.app:app --host 0.0.0.0 --port 7860 --reload
 
 # 5. Verify it's running
 curl http://localhost:7860/health
